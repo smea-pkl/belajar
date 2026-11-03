@@ -8,6 +8,8 @@ import (
 
 func main() {
 
+	// test
+
 	// var blacklist []string = []string{
 	// 	"sutarman",
 	// 	"andika",
