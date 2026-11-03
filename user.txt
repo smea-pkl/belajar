@@ -1,0 +1,9 @@
+username|nama|password|email|Jenis Kelamin
+username|nama|password|email|
+username|nama|password|email|
+username|nama|password|email|
+username|nama|password|email|
+username|nama|password|email|
+test1|test|P
+asdasd|asdasd|asdasd
+asda|asd|asdasd
