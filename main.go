@@ -4,9 +4,28 @@ import (
 	"errors"
 	"fmt"
 	"os"
+
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
+// harus disimpan ndek 2 cara.
+// 1. database
+// 2. file
+
 func main() {
+
+	dbfilename := "pkl.db"
+	db, err := gorm.Open(sqlite.Open(dbfilename), &gorm.Config{})
+
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.AutoMigrate(&User{})
+	if err != nil {
+		panic(err)
+	}
 
 	// test
 
@@ -54,6 +73,13 @@ func main() {
 		// save file
 		line := usr.ToString()
 		file.WriteString(line + "\n")
+
+		err = db.Save(&usr).Error
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("User Berhasil Disimpan")
 
 		fmt.Println("Lagi ?")
 		_, err = fmt.Scan(&ask)

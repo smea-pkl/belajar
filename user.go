@@ -1,8 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type User struct {
+	ID       uint `gorm:"primarykey"`
 	Name     string
 	Username string
 	Gender   string
