@@ -1,54 +1,20 @@
 package main
 
-import "fmt"
+type User struct {
+	Name     string
+	Username string
+}
 
 func main() {
 
-	users := []string{
-		"anita",
-		"fitri",
-		"asdasd",
-		"none",
-		"fitri",
-		"asdasd",
-		"james",
-		"fitri",
-		"asdasd",
-		"james",
-		"anita",
-		"fitri",
-		"asdasd",
-		"none",
-		"fitri",
-		"asdasd",
-		"james",
-		"fitri",
-		"asdasd",
-		"james",
-		"fitri",
-		"asdasd",
-		"james",
-		"anita",
-		"fitri",
-		"asdasd",
-		"none",
-		"fitri",
-		"asdasd",
+	users := []User{
+		User{Name: "anita", Username: "sdasd"},
+		User{Name: "dita", Username: "asd"},
+		User{Name: "anita", Username: "3"},
+		User{Name: "anita", Username: "1"},
+		User{Name: "dita", Username: "4"},
+		User{Name: "j", Username: "fgh"},
 	}
-
-	user_unik := []string{}
-
-	unik := map[string]bool{}
-
-	for _, item := range users {
-		unik[item] = true
-	}
-
-	for item := range unik {
-		user_unik = append(user_unik, item)
-	}
-
-	fmt.Println(user_unik)
 
 }
 
