@@ -11,3 +11,8 @@ plugins:
   - local: ["go", "tool", "protoc-gen-connect-go"]
     out: ../backend/gen
     opt: paths=source_relative
+
+  - local: ["node", "../frontend/node_modules/@bufbuild/protoc-gen-es/bin/protoc-gen-es"]
+    out: ../frontend/src/gen
+    opt: target=ts
+    include_imports: true
