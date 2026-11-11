@@ -7,14 +7,14 @@ type User struct {
 
 func main() {
 
-	users := []User{
-		User{Name: "anita", Username: "sdasd"},
-		User{Name: "dita", Username: "asd"},
-		User{Name: "anita", Username: "3"},
-		User{Name: "anita", Username: "1"},
-		User{Name: "dita", Username: "4"},
-		User{Name: "j", Username: "fgh"},
-	}
+	// users := []User{
+	// 	User{Name: "anita", Username: "sdasd"},
+	// 	User{Name: "dita", Username: "asd"},
+	// 	User{Name: "anita", Username: "3"},
+	// 	User{Name: "anita", Username: "1"},
+	// 	User{Name: "dita", Username: "4"},
+	// 	User{Name: "j", Username: "fgh"},
+	// }
 
 }
 
