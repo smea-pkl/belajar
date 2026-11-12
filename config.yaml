@@ -1,0 +1,3 @@
+database_file: pkl.db
+listen_address: localhost:8080
+automigrate: false

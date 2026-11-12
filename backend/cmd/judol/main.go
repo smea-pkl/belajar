@@ -1,51 +1,44 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"errors"
 	"log/slog"
 	"net/http"
-	usersv1 "pkl/backend/gen/pkl/users/v1"
-	"pkl/backend/gen/pkl/users/v1/usersv1connect"
+	"pkl/backend/configs"
+	"pkl/backend/database"
+	"pkl/backend/pkgs/san_config"
+	"pkl/backend/services/user_service"
 
-	"connectrpc.com/connect"
+	connectcors "connectrpc.com/cors"
+	"github.com/rs/cors"
 )
 
-type userServiceImpl struct{}
+func main() {
 
-// Login implements [usersv1connect.UserServiceHandler].
-func (u *userServiceImpl) Login(
-	ctx context.Context,
-	req *connect.Request[usersv1.LoginRequest],
-) (*connect.Response[usersv1.LoginResponse], error) {
+	var cfg configs.AppConfig
 
-	pay := req.Msg
-
-	if pay.Username == "heri" && pay.Password == "1234" {
-		res := usersv1.LoginResponse{
-			Msg: "login berhasil",
-		}
-
-		return connect.NewResponse(&res), nil
+	err := san_config.NewConfiguration(&cfg, san_config.NewYamlSecretProvider("./config.yaml"))
+	if err != nil {
+		panic(err)
 	}
 
-	return &connect.Response[usersv1.LoginResponse]{}, errors.New("Login Gagal")
-}
+	// inisiasi database
+	db, err := database.ConnectDB(cfg)
+	if err != nil {
+		panic(err)
+	}
 
-func main() {
 	// 1. buat object server -> mux
 	muxServer := http.NewServeMux()
 
-	path, handler := usersv1connect.NewUserServiceHandler(&userServiceImpl{})
-
 	// 2. buat api url /hello, terus ketika dibuka, nanti respon "hello"
 	muxServer.HandleFunc("GET /hello", handleHello)
-	muxServer.Handle(path, handler)
+
+	// register user service
+	user_service.UserServiceRegister(muxServer, db)
 
 	// 3. running server mux
 
-	slog.Info("running server at localhost:8000") // kasih log di cli
+	slog.Info("running server", "listen", cfg.ListenAddress) // kasih log di cli
 
 	// set protocol
 	protocols := new(http.Protocols)
@@ -54,45 +47,54 @@ func main() {
 
 	// instance server baru
 	appServer := &http.Server{
-		Addr:      "localhost:8000",
-		Handler:   muxServer,
+		Addr:      cfg.ListenAddress,
+		Handler:   withCORS(muxServer),
 		Protocols: protocols,
 	}
 
 	// running server
-	err := appServer.ListenAndServe()
+	err = appServer.ListenAndServe()
 	if err != nil {
 		panic(err)
 	}
 
 }
 
-type User struct {
-	Name     string
-	Username string
-	Image    string
-}
-
 func handleHello(w http.ResponseWriter, r *http.Request) {
-	// 1. data
-	user := User{
-		Name:     "Bambang",
-		Username: "bambang123",
-		Image:    "",
-	}
-
-	// 2. ubah data struct ke format json
-	content, err := json.MarshalIndent(user, "", "  ")
-	if err != nil {
-
-		// jika terjadi error
-
-		w.WriteHeader(http.StatusInternalServerError)
-		pesan := "gagal encoding json"
-		w.Write([]byte(pesan))
-		return
-	}
+	content := "hello"
 
 	w.WriteHeader(http.StatusOK)
-	w.Write(content)
+	w.Write([]byte(content))
+}
+
+func withCORS(handler http.Handler) http.Handler {
+	// connectcors.AllowedHeaders() covers only the CONNECT PROTOCOL headers
+	// (Content-Type, Connect-Protocol-Version, timeouts, …). It does NOT include Authorization
+	// — that is ours to add.
+	//
+	// Omitting it fails in a nasty, asymmetric way: Login carries no Authorization header, so it
+	// sails through, and EVERY authenticated call afterwards is killed by the browser at
+	// preflight — before the request ever reaches the server. Nothing appears in the server log.
+	// From the UI it looks like the API returned nothing.
+	allowedHeaders := append(connectcors.AllowedHeaders(), "Authorization")
+
+	// PUT is not a Connect method; it is added for the local document file endpoint, which clients
+	// upload to directly with a cross-origin PUT.
+	allowedMethods := append(connectcors.AllowedMethods(), http.MethodPut)
+
+	middleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: allowedMethods,
+		AllowedHeaders: allowedHeaders,
+		ExposedHeaders: connectcors.ExposedHeaders(),
+	})
+
+	app := middleware.Handler(handler)
+
+	// An AGENT's requests are not our app's — ChatGPT, Claude — so they bypass the app's origin list and answer their own
+	// CORS. The bearer, or PKCE, is what authorizes them, never an origin.
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		app.ServeHTTP(w, r)
+	})
 }

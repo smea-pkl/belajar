@@ -117,6 +117,118 @@ func (x *LoginResponse) GetMsg() string {
 	return ""
 }
 
+type RegisterRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterRequest) Reset() {
+	*x = RegisterRequest{}
+	mi := &file_pkl_users_v1_user_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterRequest) ProtoMessage() {}
+
+func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pkl_users_v1_user_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
+func (*RegisterRequest) Descriptor() ([]byte, []int) {
+	return file_pkl_users_v1_user_service_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RegisterRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *RegisterRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type RegisterResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterResponse) Reset() {
+	*x = RegisterResponse{}
+	mi := &file_pkl_users_v1_user_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterResponse) ProtoMessage() {}
+
+func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_pkl_users_v1_user_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
+func (*RegisterResponse) Descriptor() ([]byte, []int) {
+	return file_pkl_users_v1_user_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RegisterResponse) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *RegisterResponse) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
 var File_pkl_users_v1_user_service_proto protoreflect.FileDescriptor
 
 const file_pkl_users_v1_user_service_proto_rawDesc = "" +
@@ -126,9 +238,17 @@ const file_pkl_users_v1_user_service_proto_rawDesc = "" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"!\n" +
 	"\rLoginResponse\x12\x10\n" +
-	"\x03msg\x18\x01 \x01(\tR\x03msg2O\n" +
+	"\x03msg\x18\x01 \x01(\tR\x03msg\"]\n" +
+	"\x0fRegisterRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"B\n" +
+	"\x10RegisterResponse\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername2\x9a\x01\n" +
 	"\vUserService\x12@\n" +
-	"\x05Login\x12\x1a.pkl.users.v1.LoginRequest\x1a\x1b.pkl.users.v1.LoginResponseB&Z$pkl/backend/gen/pkl/users/v1;usersv1b\x06proto3"
+	"\x05Login\x12\x1a.pkl.users.v1.LoginRequest\x1a\x1b.pkl.users.v1.LoginResponse\x12I\n" +
+	"\bRegister\x12\x1d.pkl.users.v1.RegisterRequest\x1a\x1e.pkl.users.v1.RegisterResponseB&Z$pkl/backend/gen/pkl/users/v1;usersv1b\x06proto3"
 
 var (
 	file_pkl_users_v1_user_service_proto_rawDescOnce sync.Once
@@ -142,16 +262,20 @@ func file_pkl_users_v1_user_service_proto_rawDescGZIP() []byte {
 	return file_pkl_users_v1_user_service_proto_rawDescData
 }
 
-var file_pkl_users_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_pkl_users_v1_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_pkl_users_v1_user_service_proto_goTypes = []any{
-	(*LoginRequest)(nil),  // 0: pkl.users.v1.LoginRequest
-	(*LoginResponse)(nil), // 1: pkl.users.v1.LoginResponse
+	(*LoginRequest)(nil),     // 0: pkl.users.v1.LoginRequest
+	(*LoginResponse)(nil),    // 1: pkl.users.v1.LoginResponse
+	(*RegisterRequest)(nil),  // 2: pkl.users.v1.RegisterRequest
+	(*RegisterResponse)(nil), // 3: pkl.users.v1.RegisterResponse
 }
 var file_pkl_users_v1_user_service_proto_depIdxs = []int32{
 	0, // 0: pkl.users.v1.UserService.Login:input_type -> pkl.users.v1.LoginRequest
-	1, // 1: pkl.users.v1.UserService.Login:output_type -> pkl.users.v1.LoginResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: pkl.users.v1.UserService.Register:input_type -> pkl.users.v1.RegisterRequest
+	1, // 2: pkl.users.v1.UserService.Login:output_type -> pkl.users.v1.LoginResponse
+	3, // 3: pkl.users.v1.UserService.Register:output_type -> pkl.users.v1.RegisterResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -168,7 +292,7 @@ func file_pkl_users_v1_user_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pkl_users_v1_user_service_proto_rawDesc), len(file_pkl_users_v1_user_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

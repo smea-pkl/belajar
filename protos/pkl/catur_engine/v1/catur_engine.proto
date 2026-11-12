@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package pkl.catur_engine.v1;
+
+option go_package = "pkl/backend/gen/pkl/catur_engine/v1;catur_enginev1";
+
+service CaturEngineService {}
