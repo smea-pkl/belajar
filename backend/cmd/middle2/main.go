@@ -3,47 +3,98 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"slices"
 	"strings"
 	"unicode"
 )
 
+type ContentFunc func(content string) (string, error)
+type ContentMiddleware func(next ContentFunc) ContentFunc
+
 func main() {
-	content := "sSAYA adalaH superhero"
+	content := "saya"
 
-	content = aDuplicate(content)
-	content = countWord(content)
-	content = encodeWord(content)
+	handler := createMiddleware([]ContentMiddleware{
+		aDuplicate,
+		func(next ContentFunc) ContentFunc {
+			return func(content string) (string, error) {
+				slog.Info("cegat", "content", content)
 
-	slog.Info(content)
+				if strings.Contains(content, "saya") {
+
+					return "tidak diteruskan", nil
+				}
+
+				return next(content)
+			}
+		},
+		countWord,
+		encodeWord,
+	})
+
+	res, _ := handler(content)
+
+	slog.Info("hasil", "hasil", res)
 
 }
 
-func aDuplicate(content string) string {
-	result := []string{}
+func createMiddleware(middlewares []ContentMiddleware) ContentFunc {
 
-	for _, r := range content {
-		switch r {
-		case 'a', 'A':
-			result = append(result, content)
+	var handler ContentFunc = func(content string) (string, error) {
+		return content, nil
+	}
+
+	slices.Reverse(middlewares)
+	for _, mid := range middlewares {
+		handler = mid(handler)
+	}
+
+	return handler
+
+}
+
+func aDuplicate(next ContentFunc) ContentFunc {
+
+	return func(content string) (string, error) {
+
+		result := []string{}
+
+		for _, r := range content {
+			switch r {
+			case 'a', 'A':
+				result = append(result, content)
+			}
+
 		}
 
+		return next(strings.Join(result, " "))
 	}
 
-	return strings.Join(result, " ")
 }
 
-func countWord(content string) string {
-	count := len(strings.Split(content, " "))
-	return fmt.Sprintf("%d %s", count, content)
-}
+func countWord(next ContentFunc) ContentFunc {
 
-func encodeWord(content string) string {
-	var res string
-	for _, c := range content {
-		res += string(encodeRune(c))
+	return func(content string) (string, error) {
+		slog.Info("running countWord")
+
+		count := len(strings.Split(content, " "))
+		return next(fmt.Sprintf("%d %s", count, content))
 	}
 
-	return res
+}
+
+func encodeWord(next ContentFunc) ContentFunc {
+
+	return func(content string) (string, error) {
+
+		var res string
+		for _, c := range content {
+			res += string(encodeRune(c))
+		}
+
+		return next(res)
+	}
+
 }
 
 func encodeRune(c rune) rune {
