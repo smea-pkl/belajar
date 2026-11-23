@@ -27,6 +27,10 @@ func main() {
 		panic(err)
 	}
 
+	userid := "'-- 1=1"
+
+	db.Raw("select * from users where id = " + userid)
+
 	// 1. buat object server -> mux
 	muxServer := http.NewServeMux()
 
