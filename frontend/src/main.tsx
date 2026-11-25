@@ -6,6 +6,7 @@ import Register from './pages/Register.tsx'
 import Login from './pages/Login.tsx'
 import Home from './pages/Home.tsx'
 import { Toaster } from "@/components/ui/toaster"
+import Catur from './pages/Catur.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<Home />}/>
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />}/>
+          <Route path="/catur" element={<Catur />}/>
         </Routes>
       </BrowserRouter>
       <Toaster/>

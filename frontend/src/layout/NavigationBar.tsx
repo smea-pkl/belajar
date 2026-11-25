@@ -24,8 +24,11 @@ function NavigationBar(){
                 <Link to={"/"}>
                   <Button size="sm">Home</Button>
                 </Link>
+                <Link to={"/catur"}>
+                  <Button size="sm" variant="ghost">Catur</Button>
+                </Link>
                 
-                <Button size="sm" variant="ghost">Catur</Button>
+                
                 <Button size="sm" variant="ghost">Judol</Button>
                 {loginedMenu}
                 
